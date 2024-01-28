@@ -109,6 +109,65 @@ class LinkedList {
         console.log(list)
     }
 
+    sort() {
+        this.head = this.mergeSort(this.head);
+    }
+
+    // Implement the merge sort
+    mergeSort(node) {
+        if (!node || !node.next) {
+            return node;
+        }
+
+        const middle = this.getMiddle(node);
+        const nextToMiddle = middle.next;
+
+        middle.next = null;
+
+        const left = this.mergeSort(node);
+        const right = this.mergeSort(nextToMiddle);
+
+        return this.sortedMerge(left, right);
+    }
+
+    // Implement the merge function
+    sortedMerge(a, b) {
+        let result = null;
+
+        if (!a) {
+            return b;
+        } else if (!b) {
+            return a;
+        }
+
+        if (a.value <= b.value) {
+            result = a;
+            result.next = this.sortedMerge(a.next, b);
+        } else {
+            result = b;
+            result.next = this.sortedMerge(a, b.next);
+        }
+
+        return result;
+    }
+
+    // Implement the getMiddle function
+    getMiddle(node) {
+        if (!node) {
+            return node;
+        }
+
+        let slow = node;
+        let fast = node;
+
+        while (fast.next && fast.next.next) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
 }
 
 const list = new LinkedList()
@@ -122,3 +181,6 @@ list.insert(25,2)
 list.print();
 list.reverse()
 list.print()
+console.log(list.getMiddle(list.head))
+list.sort()
+list.print()    
